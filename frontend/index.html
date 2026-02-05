@@ -1,0 +1,139 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Questionnaire Agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">QA</div>
+      <div>
+        <h1>Questionnaire Agent</h1>
+        <p>Upload, index, answer, review, and evaluate questionnaires with traceable citations.</p>
+      </div>
+    </div>
+    <div class="status-line" aria-live="polite">
+      <span class="pulse"></span>
+      <span id="appStatus">Ready</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel sidebar">
+      <section class="panel-section">
+        <div class="section-header">
+          <h2>Document Ingestion</h2>
+          <span class="pill neutral">Async</span>
+        </div>
+        <p class="helper">Upload PDFs, DOCX, XLSX, or PPTX files. Parsing and indexing run in the background.</p>
+        <div class="field">
+          <input type="file" id="docFile" />
+          <button id="uploadDoc">Upload Document</button>
+          <div id="docStatus" class="status" role="status"></div>
+        </div>
+        <div id="docList" class="list"></div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-header">
+          <h2>Create Project</h2>
+          <span class="pill info">Step 2</span>
+        </div>
+        <div class="field">
+          <label for="projectName">Name</label>
+          <input id="projectName" placeholder="Vendor Security Q1" />
+        </div>
+        <div class="field">
+          <label for="projectScope">Scope</label>
+          <select id="projectScope">
+            <option value="ALL_DOCS">ALL_DOCS</option>
+            <option value="SELECTED_DOCS">SELECTED_DOCS</option>
+          </select>
+        </div>
+        <div class="field" id="projectDocsField">
+          <label>Select Documents</label>
+          <div class="actions">
+            <button type="button" id="selectAllDocs" class="ghost">Select All</button>
+            <button type="button" id="clearDocs" class="ghost">Clear</button>
+          </div>
+          <div id="projectDocsList" class="list"></div>
+          <span class="helper">Required when scope is SELECTED_DOCS.</span>
+        </div>
+        <div class="field">
+          <label for="questionnaireText">Questionnaire Text</label>
+          <textarea id="questionnaireText" rows="6" class="mono" placeholder="Enter one question per line. Use 'Section:' or '#' to define sections."></textarea>
+          <span class="helper">Multiple questions are supported.</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="autoGenerate" checked />
+          <span>Auto-generate answers after parsing</span>
+        </label>
+        <button id="createProject">Create Project</button>
+        <div id="projectStatus" class="status" role="status"></div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-header">
+          <h2>Projects</h2>
+          <button id="refreshProjects" class="ghost">Refresh</button>
+        </div>
+        <div id="projectList" class="project-list"></div>
+      </section>
+    </aside>
+
+    <section class="panel main-panel">
+      <div class="section-header">
+        <div>
+          <h2>Project Detail</h2>
+          <span class="helper">Select a project to review questions and answers.</span>
+        </div>
+        <div class="actions">
+          <button id="generateAnswers" class="secondary">Generate Answers</button>
+          <button id="refreshProject" class="ghost">Refresh</button>
+        </div>
+      </div>
+      <div id="projectDetail" class="project-detail empty">Select a project to view details.</div>
+      <div class="divider"></div>
+      <div class="section-header">
+        <div>
+          <h2>Question Review</h2>
+          <span class="helper">Confirm, reject, or override AI answers. Manual edits are preserved.</span>
+        </div>
+      </div>
+      <div id="answerList" class="answer-list"></div>
+    </section>
+
+    <section class="panel full">
+      <div class="section-header">
+        <div>
+          <h2>Evaluation Report</h2>
+          <span class="helper">Select questions, enter ground-truth answers, then review the score breakdown.</span>
+        </div>
+      </div>
+      <div class="eval-controls">
+        <input id="evalSearch" placeholder="Filter questions by text or section" />
+        <div class="actions">
+          <button id="evalSelectAll" class="ghost" type="button">Select All</button>
+          <button id="evalClearAll" class="ghost" type="button">Clear Selection</button>
+        </div>
+      </div>
+      <div id="evaluationList" class="evaluation-list"></div>
+      <div class="actions">
+        <button id="runEval">Run Evaluation</button>
+      </div>
+      <pre id="evalResult" class="code-block"></pre>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
